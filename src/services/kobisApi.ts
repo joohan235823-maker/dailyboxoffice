@@ -6,45 +6,12 @@ import {
   NationFilter,
 } from '../types/kobis';
 
-export const ENV_KOBIS_KEY = (import.meta.env.VITE_KOBIS_API_KEY || '').trim();
-export const DEFAULT_FALLBACK_KEY = '864fa68d839a3ded45de9d134e5f7837';
-export const DEFAULT_KOBIS_KEY = ENV_KOBIS_KEY || DEFAULT_FALLBACK_KEY;
-const STORAGE_KEY = 'kobis_api_key';
+export const KOBIS_API_KEY = (
+  import.meta.env.VITE_KOBIS_API_KEY || '864fa68d839a3ded45de9d134e5f7837'
+).trim();
 
-export function isEnvKeyConfigured(): boolean {
-  return Boolean(ENV_KOBIS_KEY);
-}
-
-export function getStoredApiKey(): string {
-  try {
-    const custom = localStorage.getItem(STORAGE_KEY);
-    if (custom && custom.trim()) {
-      return custom.trim();
-    }
-  } catch {
-    // Ignore localStorage errors
-  }
-  return DEFAULT_KOBIS_KEY;
-}
-
-export function setStoredApiKey(key: string): void {
-  try {
-    if (!key || key.trim() === DEFAULT_KOBIS_KEY) {
-      localStorage.removeItem(STORAGE_KEY);
-    } else {
-      localStorage.setItem(STORAGE_KEY, key.trim());
-    }
-  } catch (e) {
-    console.error('Failed to store API key', e);
-  }
-}
-
-export function resetApiKey(): void {
-  try {
-    localStorage.removeItem(STORAGE_KEY);
-  } catch (e) {
-    console.error('Failed to reset API key', e);
-  }
+export function getApiKey(): string {
+  return KOBIS_API_KEY;
 }
 
 // Fallback movie details catalog for reliable offline or sandbox access
@@ -591,7 +558,7 @@ export async function fetchDailyBoxOffice(
     multiMovieYn?: 'Y' | 'N';
   }
 ): Promise<{ list: DailyBoxOfficeItem[]; source: 'live' | 'fallback'; error?: string }> {
-  const apiKey = getStoredApiKey();
+  const apiKey = getApiKey();
   const params = new URLSearchParams({
     key: apiKey,
     targetDt,
@@ -669,7 +636,7 @@ export async function fetchDailyBoxOffice(
  * Fetch detailed movie information by movieCd.
  */
 export async function fetchMovieDetail(movieCd: string): Promise<{ info: MovieInfo; source: 'live' | 'fallback' }> {
-  const apiKey = getStoredApiKey();
+  const apiKey = getApiKey();
   const rawUrl = `https://kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${apiKey}&movieCd=${movieCd}`;
   const httpUrl = `http://www.kobis.or.kr/kobisopenapi/webservice/rest/movie/searchMovieInfo.json?key=${apiKey}&movieCd=${movieCd}`;
 

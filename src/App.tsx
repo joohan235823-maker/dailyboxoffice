@@ -26,7 +26,6 @@ import { SummaryStats } from './components/SummaryStats';
 import { BoxOfficeTable } from './components/BoxOfficeTable';
 import { BoxOfficeCards } from './components/BoxOfficeCards';
 import { MovieDetailModal } from './components/MovieDetailModal';
-import { ApiKeyModal } from './components/ApiKeyModal';
 
 export default function App() {
   // Default to yesterday's date (or 2026-09-30 as provided in user brief)
@@ -47,7 +46,6 @@ export default function App() {
 
   // Modals
   const [selectedMovieCd, setSelectedMovieCd] = useState<string | null>(null);
-  const [isApiKeyModalOpen, setIsApiKeyModalOpen] = useState<boolean>(false);
 
   // Load box office data whenever date or nation filter changes
   const loadBoxOfficeData = useCallback(async (dateDash: string, nation: NationFilter) => {
@@ -85,7 +83,6 @@ export default function App() {
     <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-400 selection:text-slate-950">
       {/* Top Bar Contract Navigation */}
       <Header
-        onOpenApiKeyModal={() => setIsApiKeyModalOpen(true)}
         onRefresh={() => loadBoxOfficeData(selectedDate, nationFilter)}
         isLoading={isLoading}
         dataSource={dataSource}
@@ -254,13 +251,6 @@ export default function App() {
       <MovieDetailModal
         movieCd={selectedMovieCd}
         onClose={() => setSelectedMovieCd(null)}
-      />
-
-      {/* API Key Modal */}
-      <ApiKeyModal
-        isOpen={isApiKeyModalOpen}
-        onClose={() => setIsApiKeyModalOpen(false)}
-        onKeyUpdated={() => loadBoxOfficeData(selectedDate, nationFilter)}
       />
     </div>
   );

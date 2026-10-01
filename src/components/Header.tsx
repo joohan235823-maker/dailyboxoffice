@@ -1,15 +1,13 @@
 import React from 'react';
-import { KeyRound, RefreshCw, Film } from 'lucide-react';
+import { RefreshCw, Film } from 'lucide-react';
 
 interface HeaderProps {
-  onOpenApiKeyModal: () => void;
   onRefresh: () => void;
   isLoading: boolean;
   dataSource: 'live' | 'fallback';
 }
 
 export const Header: React.FC<HeaderProps> = ({
-  onOpenApiKeyModal,
   onRefresh,
   isLoading,
   dataSource,
@@ -54,22 +52,14 @@ export const Header: React.FC<HeaderProps> = ({
             onClick={onRefresh}
             disabled={isLoading}
             title="데이터 새로고침"
-            className="p-2 text-slate-300 hover:text-white bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg transition-colors disabled:opacity-50"
-            aria-label="새로고침"
+            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg transition-colors disabled:opacity-50"
           >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-          </button>
-
-          <button
-            onClick={onOpenApiKeyModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-slate-200 bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg transition-colors whitespace-nowrap"
-          >
-            <KeyRound className="w-3.5 h-3.5 text-amber-400" />
-            <span className="hidden sm:inline">API 키 설정</span>
-            <span className="sm:hidden">키</span>
+            <RefreshCw className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            <span>새로고침</span>
           </button>
         </div>
       </div>
     </header>
   );
 };
+
